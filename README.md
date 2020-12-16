@@ -1,2 +1,2 @@
-# Twitter_sentiment_analysis
+# Twitter sentiment analysis
 Twint, nltk, textblob, vader
