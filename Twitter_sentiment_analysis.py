@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 import twint
 import string
 from textblob import TextBlob
@@ -97,8 +98,16 @@ tweets['sentiment_tb'] = tweets['tb'].apply(sentiment_tb)
 
 #Comparison
 
-tweets['sentiment_vader'].value_counts()
-tweets['sentiment_tb'].value_counts()
+perc_vader = tweets['sentiment_vader'].value_counts(normalize=True)
+perc_tb = tweets['sentiment_tb'].value_counts(normalize=True)
+perc_vader, perc_tb = perc_vader*100, perc_tb*100
+perc_both = pd.concat([perc_vader, perc_tb], axis=1).reset_index()
+
+fig, ax = plt.subplots()
+perc_both.plot.bar(x='index', ax=ax)
+ax.set_title('Summary of twitter replies to Anders - divided into 3 groups')
+ax.set_xlabel('Type of replies')
+ax.set_ylabel('Percentage of total replies')
 
 positive_vader = (tweets[['tweet_vader', 'vader']][tweets['sentiment_vader'] == 'Positive']).sort_values(by=['vader'], ascending=False)
 positive_tb = (tweets[['tweet_tb', 'tb']][tweets['sentiment_tb'] == 'Positive']).sort_values(by='tb', ascending=False)
